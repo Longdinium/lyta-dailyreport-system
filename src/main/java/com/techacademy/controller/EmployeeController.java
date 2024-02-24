@@ -100,13 +100,23 @@ public class EmployeeController {
 
     // 従業員更新画面
     @GetMapping(value = "/{code}/update")
-    public String update(@PathVariable String code, Model model) {
+    public String edit(@PathVariable String code, Model model) {
 
-        // 後程、ここにfindByCodeを詳細画面と同様に入れてあげる必要がある
-        // Controllerを修正、URLベタ打ちで更新画面（update.html）に遷移できるように
+        model.addAttribute("employee", employeeService.findByCode(code));
 
         return "employees/update";
     }
+
+    // 従業員更新処理
+    @PostMapping(value = "/{code}/update")
+    public String update(Employee employee) {
+        // 入力結果の登録
+        employeeService.save(employee);
+        // 一覧画面にリダイレクト
+        return "redirect:/employees";
+    }
+
+
 
     // 従業員削除処理
     @PostMapping(value = "/{code}/delete")
