@@ -98,6 +98,16 @@ public class EmployeeController {
         return "redirect:/employees";
     }
 
+    // 従業員更新画面
+    @GetMapping(value = "/{code}/update")
+    public String update(@PathVariable String code, Model model) {
+
+        // 後程、ここにfindByCodeを詳細画面と同様に入れてあげる必要がある
+        // Controllerを修正、URLベタ打ちで更新画面（update.html）に遷移できるように
+
+        return "employees/update";
+    }
+
     // 従業員削除処理
     @PostMapping(value = "/{code}/delete")
     public String delete(@PathVariable String code, @AuthenticationPrincipal UserDetail userDetail, Model model) {
