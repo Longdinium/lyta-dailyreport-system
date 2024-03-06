@@ -98,24 +98,46 @@ public class EmployeeController {
         return "redirect:/employees";
     }
 
-    // 従業員更新画面
+    // 従業員更新画
     @GetMapping(value = "/{code}/update")
-    public String edit(@PathVariable String code, Model model) {
+    public String edit(Employee employee, @PathVariable String code, Model model) {
+        if(code != null) {
+            // idがnullでないとき -> サービスから取得した値をModelに登録
+            model.addAttribute("employee", employeeService.findByCode(code));
+                // サービスで定義したgetUserの結果をuserという名前でModelに登録
+            // User更新画面に遷移
+        } else {
+            // idがnullのとき
+            model.addAttribute("employee", employee);
+        }
 
-        model.addAttribute("employee", employeeService.findByCode(code));
+        
 
         return "employees/update";
     }
 
     // 従業員更新処理
     @PostMapping(value = "/{code}/update")
-    public String update(Employee employee) {
+    public String update(@Validated Employee employee, BindingResult res, Model model) {
+        // ValidatedアノテーションでEmployeeエンティティに基づく入力チェック
+        
+        if(res.hasErrors()) {
+            // エラーありの場合
+            return edit(employee, null, model);
+        }
+        
+        ErrorKinds result = employeeService.update(employee);
+
+        if (ErrorMessage.contains(result)) {
+            model.addAttribute(ErrorMessage.getErrorName(result), ErrorMessage.getErrorValue(result));
+            return edit(employee, null, model);
+        }
+            
         // 入力結果の登録
-        employeeService.save(employee);
+        employeeService.update(employee);
         // 一覧画面にリダイレクト
         return "redirect:/employees";
     }
-
 
 
     // 従業員削除処理

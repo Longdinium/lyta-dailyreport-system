@@ -51,6 +51,35 @@ public class EmployeeService {
         employeeRepository.save(employee);
         return ErrorKinds.SUCCESS;
     }
+    
+    // 従業員更新
+    @Transactional
+    public ErrorKinds update(Employee employee) {
+        Employee original = findByCode(employee.getCode());
+        // originalは外に出してもif以下では使っていないので問題ない
+        if (!"".equals(employee.getPassword())) {
+            // パスワードが空白でない場合
+            // PWチェックの結果をresultに渡す
+            ErrorKinds result = employeePasswordCheck(employee);
+            if (ErrorKinds.CHECK_OK != result) {
+                return result;
+            }
+        } else {
+            // パスワードが空白の場合、チェックはせず元のパスワードを渡す
+            // 1. まずオリジナルのパスワードをとってくる
+            // 2. オリジナルのパスワードの値をresultに渡す
+            employee.setPassword(original.getPassword());
+        }
+        
+        employee.setDeleteFlg(false);
+
+        LocalDateTime now = LocalDateTime.now();
+        employee.setCreatedAt(original.getCreatedAt());
+        employee.setUpdatedAt(now);
+
+        employeeRepository.save(employee);
+        return ErrorKinds.SUCCESS;
+    }
 
     // 従業員削除
     @Transactional
