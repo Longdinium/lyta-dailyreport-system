@@ -20,24 +20,22 @@
                 <div class="col-xl-12">
                     <div class="card">
                         <div class="card-body">
-                            <form th:action="@{/employees/add}" th:object="${employee}" th:method="post">
+                            <form th:action="@{/reports/add}" th:object="${report}" th:method="post">
                                 <div class="wizard wizard-success mb-4">
                                     <!-- 日付欄 -->
                                     <div class="mb-3">
                                         <label class="form-label" for="reportDate">日付</label>
                                         <p class="mb-1"></p>
                                         <div class="col-md-7">
-                                            <input type="date" class="form-control">
-                                            
+                                            <input type="date" class="form-control" th:field="*{reportDate}">
                                             <!--
                                             <input class="form-control" type="date" th:field="*{reportDate}" th:errorclass="err" id="code">
                                             <span th:errors="*{code}" class="text-danger"></span>
                                             <span th:if="${codeError} neq null" th:text="${codeError}" class="text-danger"></span>
                                             -->
-                                            
                                         </div>
                                     </div>
-                                    <!-- 氏名欄 表示のみ -->
+                                    <!-- 氏名欄 表示のみ どうやってemployeeから名前を引き込む？-->
                                     <div class="mb-3">
                                         <label class="form-label" for="name">氏名</label>
                                         <p class="mb-1">テスト</p>
@@ -52,9 +50,7 @@
                                         <label class="form-label" for="title">タイトル</label>
                                         <p class="mb-1"></p>
                                         <div class="col-md-7">
-                                            <input class="form-control" type="text">
-                                            <!-- <input class="form-control" type="text" th:field="*{title}" th:errorclass="err" id="name">
-                                            <span th:errors="*{name}" class="text-danger"></span> -->
+                                            <input class="form-control" type="text" th:field="*{title}">
                                         <!-- <input class="form-control" type="text" th:field="*{name}" th:errorclass="err" id="name">
                                             <span th:errors="*{name}" class="text-danger"></span> -->
                                         </div>
@@ -66,14 +62,14 @@
                                         <div class="col-md-7">
                                             <!-- <input class="form-control" type="content" th:field="*{password}" th:errorclass="err" id="password"> -->
                                             <!-- <span th:if="${passwordError} neq null" th:text="${passwordError}" class="text-danger"></span> -->
-                                            <textarea rows="3" cols="80" class="form-control"></textarea>
+                                            <textarea rows="3" cols="80" class="form-control" type="text" th:field="*{content}"></textarea>
                                         </div>
                                     </div>
                                 </div>
                                 
                                 <p class="mt-5">
                                     <!-- 登録ボタン -->
-                                    <!-- <input type="submit" value="登録" class="btn btn-primary"> -->
+                                    <input type="submit" value="登録" class="btn btn-primary">
                                     <!-- 戻るボタン -->
                                     <a th:href="@{/reports}" class="btn btn-primary">戻る</a>
                                 </p>

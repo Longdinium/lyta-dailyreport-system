@@ -28,11 +28,13 @@ public class ReportService {
         // this.passwordEncoder = passwordEncoder;
     }
     
-    /*
+    
     // 従業員保存
     @Transactional
-    public ErrorKinds save(Employee employee) {
-
+    // public ErrorKinds save(Report report) {
+    public boolean save(Report report) {
+        
+        /*
         // パスワードチェック
         ErrorKinds result = employeePasswordCheck(employee);
         if (ErrorKinds.CHECK_OK != result) {
@@ -43,17 +45,20 @@ public class ReportService {
         if (findByCode(employee.getCode()) != null) {
             return ErrorKinds.DUPLICATE_ERROR;
         }
+        */
 
-        employee.setDeleteFlg(false);
+        report.setDeleteFlg(false);
 
         LocalDateTime now = LocalDateTime.now();
-        employee.setCreatedAt(now);
-        employee.setUpdatedAt(now);
+        report.setCreatedAt(now);
+        report.setUpdatedAt(now);
 
-        employeeRepository.save(employee);
-        return ErrorKinds.SUCCESS;
+        reportRepository.save(report);
+        return true;
+        // return ErrorKinds.SUCCESS;
     }
     
+    /*
     // 従業員更新
     @Transactional
     public ErrorKinds update(Employee employee) {
