@@ -24,11 +24,10 @@ import lombok.Data;
 @SQLRestriction("delete_flg = false")
 public class Report {
 
-
     // ID
     @Id
     // @Column(length = 10)
-    @NotEmpty
+    // @NotEmpty
     // @Length(max = 10)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -36,7 +35,7 @@ public class Report {
     // 日付
     @Column(nullable = false)
     @NotEmpty
-    private LocalDate report_date;
+    private LocalDate reportDate;
 
     // タイトル
     @Column(length = 100, nullable = false)
@@ -51,12 +50,11 @@ public class Report {
     private String content;
     
     // 社員番号
-    @Column(length = 10)
-    @NotEmpty
-    @Length(max = 10)
-    private String employee_code;
-    
+        // @JoinColumnにより紐付けが行われているため、ここでは
+        // private String employeeCode;
+        // のように定義する必要はない
     @ManyToOne
+    @NotEmpty
     @JoinColumn(name = "employee_code", referencedColumnName = "code", nullable = false)
     private Employee employee;
     
@@ -66,15 +64,12 @@ public class Report {
 
     // 登録日時
     @Column(nullable = false)
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
 
     // 更新日時
     @Column(nullable = false)
-    private LocalDateTime updated_at;
+    private LocalDateTime updatedAt;
     
-    
-
-    
-
+  
     
 }

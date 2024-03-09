@@ -23,6 +23,11 @@ import lombok.Data;
 @Table(name = "employees")
 @SQLRestriction("delete_flg = false")
 public class Employee {
+    
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
+        // mappedByがあるので、つまりオーナーではない？
+        // 指定された側、Report.employeeがオーナー？→FKがある方をオーナーにする？
+    private List<Report> reportList;
 
     public static enum Role {
         GENERAL("一般"), ADMIN("管理者");
@@ -72,7 +77,6 @@ public class Employee {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
     
-    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
-    private List<Report> reportList;
+    
 
 }
