@@ -29,7 +29,7 @@ public class Report {
     @Id
     // @Column(length = 10)
     @NotEmpty
-    @Length(max = 10)
+    // @Length(max = 10)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     
