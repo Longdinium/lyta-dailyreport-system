@@ -62,7 +62,7 @@ public class ReportService {
         return ErrorKinds.SUCCESS;
     }
     
-    // 日報更新
+    // 日報更新処理
     @Transactional
     public ErrorKinds update(Report report) {
         Report original = findByCode( String.valueOf( report.getId() ) );

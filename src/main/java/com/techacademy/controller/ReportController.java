@@ -20,6 +20,7 @@ import com.techacademy.constants.ErrorMessage;
 
 import com.techacademy.entity.Employee;
 import com.techacademy.entity.Report;
+import com.techacademy.entity.Employee.Role;
 import com.techacademy.service.EmployeeService;
 import com.techacademy.service.ReportService;
 import com.techacademy.service.UserDetail;
@@ -38,12 +39,24 @@ public class ReportController {
 
     // 日報一覧画面
     @GetMapping
-    public String list(Model model) {
-        // ヒット件数をlistSizeという名前で登録
-        model.addAttribute("listSize", reportService.findAll().size());
-            // list.htmlの全○件の表示に使用
-        // 全件検索結果をModelに登録
-        model.addAttribute("reportList", reportService.findAll());
+    public String list(Model model, @AuthenticationPrincipal UserDetail userDetail) {
+        Employee user = userDetail.getEmployee();
+        if (user.getRole() == Role.ADMIN) {
+         // ヒット件数をlistSizeという名前で登録
+            model.addAttribute("listSize", reportService.findAll().size());
+                // list.htmlの全○件の表示に使用
+            // 全件検索結果をModelに登録
+            model.addAttribute("reportList", reportService.findAll());
+        } else {
+            // model.addAttribute("listSize", user.getReportList().size());
+            // model.addAttribute("reportList", user.getReportList());
+            model.addAttribute("listSize", reportService.findByEmployee(user).size());
+            model.addAttribute("reportList", reportService.findByEmployee(user));
+        
+        }
+        
+        
+        
 
         return "reports/list";
     }
@@ -176,14 +189,17 @@ public class ReportController {
         List<Report> reportList = reportService.findByEmployee(employee);
         for (int i = 0; i < reportList.size(); i++) {
             Report reportCheck = reportList.get(i);
-            if (report.getReportDate().equals(reportCheck.getReportDate() ) ) { // 一致する日付けがあればTrue
+            if (report.getId().equals(reportCheck.getId())){
+                continue;
+            } else {
+                if(report.getReportDate().equals(reportCheck.getReportDate() ) ) { // 一致する日付けがあればTrue
                 model.addAttribute(ErrorMessage.getErrorName(ErrorKinds.DATECHECK_ERROR),
                         ErrorMessage.getErrorValue(ErrorKinds.DATECHECK_ERROR));
                 return edit(report, userDetail, null, model);
              // idがnullになるがeditのelseの処理で元の値を表示
-            }
+                }
+            }   
         }
-        
         // ErrorKinds result = reportService.update(report);
         
         
@@ -198,8 +214,7 @@ public class ReportController {
         reportService.update(report);
         // 一覧画面にリダイレクト
         return "redirect:/reports";
-        
-    }
+        }  
     
     
     

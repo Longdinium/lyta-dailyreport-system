@@ -27,7 +27,7 @@ public class Employee {
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
         // mappedByがあるので、つまりオーナーではない？
         // 指定された側、Report.employeeがオーナー？→FKがある方をオーナーにする？
-    private List<Report> reportList;
+    public List<Report> reportList;
 
     public static enum Role {
         GENERAL("一般"), ADMIN("管理者");
