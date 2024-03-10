@@ -1,5 +1,7 @@
 package com.techacademy.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -106,11 +108,26 @@ public class ReportController {
                     ErrorMessage.getErrorValue(ErrorKinds.DUPLICATE_EXCEPTION_ERROR));
             return create(report, null, model);
         }
-        */
+        
         Employee employee = userDetail.getEmployee();
         report.setEmployee(employee);
         ErrorKinds result = reportService.save(report);
-
+        */
+        Employee employee = userDetail.getEmployee();
+        report.setEmployee(employee);
+        // 業務チェック：すでに同じ日付の日報が存在したらエラーにする
+        List<Report> reportList = reportService.findByEmployee(employee);
+        for (int i = 0; i < reportList.size(); i++) {
+            Report reportCheck = reportList.get(i);
+            if (report.getReportDate().equals(reportCheck.getReportDate() ) ) { // 一致する日付けがあればTrue
+                model.addAttribute(ErrorMessage.getErrorName(ErrorKinds.DATECHECK_ERROR),
+                        ErrorMessage.getErrorValue(ErrorKinds.DATECHECK_ERROR));
+                return create(report, userDetail, model);
+            }
+        }
+        
+        ErrorKinds result = reportService.save(report);
+        
         if (ErrorMessage.contains(result)) {
             model.addAttribute(ErrorMessage.getErrorName(result), ErrorMessage.getErrorValue(result));
             return create(report, userDetail, model);
@@ -124,50 +141,66 @@ public class ReportController {
     // 日報更新画面
     @GetMapping(value = "/{id}/update")
     public String edit(Report report, @AuthenticationPrincipal UserDetail userDetail, @PathVariable String id, Model model) {
-        
-        Employee employee = userDetail.getEmployee();
-        report.setEmployee(employee);
-        model.addAttribute("report", report);
-        
-        /*
-        if(code != null) {
-            // idがnullでないとき -> サービスから取得した値をModelに登録
-            model.addAttribute("employee", employeeService.findByCode(code));
-                // サービスで定義したgetUserの結果をuserという名前でModelに登録
-            // User更新画面に遷移
+        if(id != null) {
+            // idがnullでない＝通常の遷移なのでDB値をModelに登録
+            Employee employee = userDetail.getEmployee();
+            report.setEmployee(employee);
+            model.addAttribute("report", reportService.findByCode(id));
         } else {
-            // idがnullのとき
-            model.addAttribute("employee", employee);
+            // idがnull＝更新処理でエラーになって戻ってきた場合なので、
+            // 元の値を表示
+            model.addAttribute("report", report);
         }
-        */
+        
         return "reports/update";
     }
 
     
-    /*
-    // 従業員更新処理
-    @PostMapping(value = "/{code}/update")
-    public String update(@Validated Employee employee, BindingResult res, Model model) {
+    
+    // 日報更新処理
+    @PostMapping(value = "/{id}/update")
+    public String update(@AuthenticationPrincipal UserDetail userDetail, @Validated Report report, BindingResult res, Model model) {
         // ValidatedアノテーションでEmployeeエンティティに基づく入力チェック
+        
+        Employee employee = userDetail.getEmployee();
+        report.setEmployee(employee);
         
         if(res.hasErrors()) {
             // エラーありの場合
-            return edit(employee, null, model);
+            return edit(report, userDetail, null, model);
+            // idがnullになるがeditのelseの処理で元の値を表示
+        }
+
+        
+        // 業務チェック：すでに同じ日付の日報が存在したらエラーにする
+        List<Report> reportList = reportService.findByEmployee(employee);
+        for (int i = 0; i < reportList.size(); i++) {
+            Report reportCheck = reportList.get(i);
+            if (report.getReportDate().equals(reportCheck.getReportDate() ) ) { // 一致する日付けがあればTrue
+                model.addAttribute(ErrorMessage.getErrorName(ErrorKinds.DATECHECK_ERROR),
+                        ErrorMessage.getErrorValue(ErrorKinds.DATECHECK_ERROR));
+                return edit(report, userDetail, null, model);
+             // idがnullになるがeditのelseの処理で元の値を表示
+            }
         }
         
-        ErrorKinds result = employeeService.update(employee);
-
+        // ErrorKinds result = reportService.update(report);
+        
+        
+        /*
         if (ErrorMessage.contains(result)) {
             model.addAttribute(ErrorMessage.getErrorName(result), ErrorMessage.getErrorValue(result));
             return edit(employee, null, model);
         }
+        */
             
         // 入力結果の登録
-        employeeService.update(employee);
+        reportService.update(report);
         // 一覧画面にリダイレクト
-        return "redirect:/employees";
+        return "redirect:/reports";
+        
     }
-    */
+    
     
     
     // 日報削除処理

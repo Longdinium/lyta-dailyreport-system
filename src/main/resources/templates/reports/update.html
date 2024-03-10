@@ -31,39 +31,35 @@
                                         <div class="col-md-7">
                                             <input type="date" class="form-control" th:field="*{reportDate}" th:errorclass="err" id="reportDate">
                                             <span th:errors="*{reportDate}" class="text-danger"></span>
+                                            <span th:if="${reportDateError} neq null" th:text="${reportDateError}" class="text-danger"></span>
                                         </div>
                                     </div>
-                                    
-                                    
                                     <!-- 氏名欄 表示のみ -->
                                     <div class="mb-3">
                                         <label class="form-label" for="name">氏名</label>
                                         <p class="mb-1" th:text="${report.employee.name}"></p>
                                     </div>
-                                    
-                                    <!--
+                                    <!-- タイトル欄 -->
                                     <div class="mb-3">
-                                        <label class="form-label" for="password">パスワード</label>
+                                        <label class="form-label" for="title">タイトル</label>
                                         <p class="mb-1"></p>
                                         <div class="col-md-7">
-                                            <input class="form-control" type="password" th:field="*{password}" th:errorclass="err" id="password">
-                                            <span th:if="${passwordError} neq null" th:text="${passwordError}" class="text-danger"></span>
+                                            <input class="form-control" type="text" th:field="*{title}" th:errorclass="err" id="title">
+                                            <span th:errors="*{title}" class="text-danger"></span>
                                         </div>
                                     </div>
-
+                                    <!-- 内容欄 -->
                                     <div class="mb-3">
-                                        <label class="form-label" for="role">権限</label>
+                                        <label class="form-label" for="content">内容</label>
                                         <p class="mb-1"></p>
-                                        <div class="col-md-4">
-                                            <select class="form-select" th:field="*{role}" id="role">
-                                                <option th:each="item:${T(com.techacademy.entity.Employee.Role).values()}" th:value="${item}" th:text="${item.getValue()}" th:selected="*{role} == ${item}">
-                                            </select>
+                                        <div class="col-md-7">
+                                            <textarea rows="3" cols="80" class="form-control" type="text" th:field="*{content}" th:errorclass="err" id="content"></textarea>
+                                            <span th:errors="*{content}" class="text-danger"></span>
                                         </div>
                                     </div>
-
+                                    
                                 </div>
-                                -->
-
+                                
                                 <p class="mt-5">
                                     <input type="submit" value="更新" class="btn btn-primary">
                                     <a th:href="@{/reports}" class="btn btn-primary">戻る</a>

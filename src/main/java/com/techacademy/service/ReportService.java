@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.techacademy.constants.ErrorKinds;
+import com.techacademy.entity.Employee;
 import com.techacademy.entity.Report;
 import com.techacademy.repository.ReportRepository;
 
@@ -61,12 +62,12 @@ public class ReportService {
         return ErrorKinds.SUCCESS;
     }
     
-    /*
-    // 従業員更新
+    // 日報更新
     @Transactional
-    public ErrorKinds update(Employee employee) {
-        Employee original = findByCode(employee.getCode());
-        // originalは外に出してもif以下では使っていないので問題ない
+    public ErrorKinds update(Report report) {
+        Report original = findByCode( String.valueOf( report.getId() ) );
+        
+        /*
         if (!"".equals(employee.getPassword())) {
             // パスワードが空白でない場合
             // PWチェックの結果をresultに渡す
@@ -80,17 +81,19 @@ public class ReportService {
             // 2. オリジナルのパスワードの値をresultに渡す
             employee.setPassword(original.getPassword());
         }
-        
-        employee.setDeleteFlg(false);
-
+        */
+        report.setDeleteFlg(false);
         LocalDateTime now = LocalDateTime.now();
+        /*
         employee.setCreatedAt(original.getCreatedAt());
         employee.setUpdatedAt(now);
+         */
+        report.setCreatedAt(original.getCreatedAt() );
+        report.setUpdatedAt(now);
 
-        employeeRepository.save(employee);
+        reportRepository.save(report);
         return ErrorKinds.SUCCESS;
     }
-    */
 
     // 従業員削除
     @Transactional
@@ -125,6 +128,12 @@ public class ReportService {
         // 取得できなかった場合はnullを返す
         Report report = option.orElse(null);
         return report;
+    }
+    
+    // 従業員に紐づく日報情報を検索しリストで取得
+    public List<Report> findByEmployee(Employee employee){
+        List<Report> list = reportRepository.findByEmployee(employee);
+        return list;
     }
     
     /*

@@ -29,9 +29,7 @@
                                         <div class="col-md-7">
                                             <input type="date" class="form-control" th:field="*{reportDate}" th:errorclass="err" id="reportDate">
                                             <span th:errors="*{reportDate}" class="text-danger"></span>
-                                            <!--
-                                            <span th:if="${codeError} neq null" th:text="${codeError}" class="text-danger"></span>
-                                            -->
+                                            <span th:if="${reportDateError} neq null" th:text="${reportDateError}" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <!-- 氏名欄 表示のみ -->
