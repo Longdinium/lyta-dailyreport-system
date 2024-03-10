@@ -56,13 +56,16 @@ public class ReportController {
     
     // 日報新規登録画面
     @GetMapping(value = "/add")
-    public String create(@ModelAttribute Report report) {
+    public String create(@ModelAttribute Report report, @AuthenticationPrincipal UserDetail userDetail, Model model) {
+        Employee employee = userDetail.getEmployee();
+        report.setEmployee(employee);
+        model.addAttribute("report", report);
         return "reports/new";
     }
     
-    // 従業員新規登録処理
+    // 日報新規登録処理
     @PostMapping(value = "/add")
-    public String add(@Validated Report report, BindingResult res, Model model) {
+    public String add(@AuthenticationPrincipal UserDetail userDetail, @Validated Report report, BindingResult res, Model model) {
         
         /*
         // パスワード空白チェック
@@ -79,30 +82,41 @@ public class ReportController {
         }
         */
         
-
+        /*
         // 入力チェック
         if (res.hasErrors()) {
-            return create(report);
+            return create(report, null, model);
         }
+        */
         
         // 業務チェック
         // 論理削除を行った従業員番号を指定すると例外となるためtry~catchで対応
         // (findByIdでは削除フラグがTRUEのデータが取得出来ないため)
         /*
         try {
+            // 例外が発生する処理
             ErrorKinds result = reportService.save(report);
 
             if (ErrorMessage.contains(result)) {
                 model.addAttribute(ErrorMessage.getErrorName(result), ErrorMessage.getErrorValue(result));
-                return create(employee);
+                return create(report, userDetail, model);
             }
 
         } catch (DataIntegrityViolationException e) {
             model.addAttribute(ErrorMessage.getErrorName(ErrorKinds.DUPLICATE_EXCEPTION_ERROR),
                     ErrorMessage.getErrorValue(ErrorKinds.DUPLICATE_EXCEPTION_ERROR));
-            return create(employee);
+            return create(report, null, model);
         }
         */
+        Employee employee = userDetail.getEmployee();
+        report.setEmployee(employee);
+        ErrorKinds result = reportService.save(report);
+
+        if (ErrorMessage.contains(result)) {
+            model.addAttribute(ErrorMessage.getErrorName(result), ErrorMessage.getErrorValue(result));
+            return create(report, userDetail, model);
+        }
+        
 
         return "redirect:/reports";
     }

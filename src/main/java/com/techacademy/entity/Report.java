@@ -57,7 +57,6 @@ public class Report {
         // private String employeeCode;
         // のように定義する必要はない
     @ManyToOne
-    @NotEmpty
     @JoinColumn(name = "employee_code", referencedColumnName = "code", nullable = false)
     private Employee employee;
     

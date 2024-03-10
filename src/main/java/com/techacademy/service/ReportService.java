@@ -28,11 +28,13 @@ public class ReportService {
         // this.passwordEncoder = passwordEncoder;
     }
     
-    
-    // 従業員保存
+        
+    // 日報保存
     @Transactional
-    // public ErrorKinds save(Report report) {
-    public boolean save(Report report) {
+    public ErrorKinds save(Report report) {
+        // 過去に同じ日付で登録された日報がないかのチェック
+        //reportRepository.findById( report.getEmployee() );
+        //findByCode( report.getEmployee() );
         
         /*
         // パスワードチェック
@@ -40,12 +42,14 @@ public class ReportService {
         if (ErrorKinds.CHECK_OK != result) {
             return result;
         }
+        
 
-        // 従業員番号重複チェック
-        if (findByCode(employee.getCode()) != null) {
+        // 日付重複チェック
+        if (report.getReportDate() != null) {
             return ErrorKinds.DUPLICATE_ERROR;
         }
         */
+        
 
         report.setDeleteFlg(false);
 
@@ -54,8 +58,7 @@ public class ReportService {
         report.setUpdatedAt(now);
 
         reportRepository.save(report);
-        return true;
-        // return ErrorKinds.SUCCESS;
+        return ErrorKinds.SUCCESS;
     }
     
     /*

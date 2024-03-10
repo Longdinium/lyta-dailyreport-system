@@ -35,10 +35,10 @@
                                             -->
                                         </div>
                                     </div>
-                                    <!-- 氏名欄 表示のみ どうやってemployeeから名前を引き込む？-->
+                                    <!-- 氏名欄 表示のみ -->
                                     <div class="mb-3">
                                         <label class="form-label" for="name">氏名</label>
-                                        <p class="mb-1">テスト</p>
+                                        <p class="mb-1" th:text="${report.employee.name}"></p>
                                         
                                         <!-- <div class="col-md-7">
                                             <input class="form-control" type="text" th:field="*{name}" th:errorclass="err" id="name">
@@ -50,7 +50,8 @@
                                         <label class="form-label" for="title">タイトル</label>
                                         <p class="mb-1"></p>
                                         <div class="col-md-7">
-                                            <input class="form-control" type="text" th:field="*{title}">
+                                            <input class="form-control" type="text" th:field="*{title}" th:errorclass="err" id="title">
+                                            <span th:errors="*{title}" class="text-danger"></span>
                                         <!-- <input class="form-control" type="text" th:field="*{name}" th:errorclass="err" id="name">
                                             <span th:errors="*{name}" class="text-danger"></span> -->
                                         </div>
