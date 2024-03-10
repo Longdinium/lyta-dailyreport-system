@@ -27,10 +27,9 @@
                                         <label class="form-label" for="reportDate">日付</label>
                                         <p class="mb-1"></p>
                                         <div class="col-md-7">
-                                            <input type="date" class="form-control" th:field="*{reportDate}">
+                                            <input type="date" class="form-control" th:field="*{reportDate}" th:errorclass="err" id="reportDate">
+                                            <span th:errors="*{reportDate}" class="text-danger"></span>
                                             <!--
-                                            <input class="form-control" type="date" th:field="*{reportDate}" th:errorclass="err" id="code">
-                                            <span th:errors="*{code}" class="text-danger"></span>
                                             <span th:if="${codeError} neq null" th:text="${codeError}" class="text-danger"></span>
                                             -->
                                         </div>
@@ -39,11 +38,6 @@
                                     <div class="mb-3">
                                         <label class="form-label" for="name">氏名</label>
                                         <p class="mb-1" th:text="${report.employee.name}"></p>
-                                        
-                                        <!-- <div class="col-md-7">
-                                            <input class="form-control" type="text" th:field="*{name}" th:errorclass="err" id="name">
-                                            <span th:errors="*{name}" class="text-danger"></span>
-                                        </div> -->
                                     </div>
                                     <!-- タイトル欄 -->
                                     <div class="mb-3">
@@ -52,8 +46,6 @@
                                         <div class="col-md-7">
                                             <input class="form-control" type="text" th:field="*{title}" th:errorclass="err" id="title">
                                             <span th:errors="*{title}" class="text-danger"></span>
-                                        <!-- <input class="form-control" type="text" th:field="*{name}" th:errorclass="err" id="name">
-                                            <span th:errors="*{name}" class="text-danger"></span> -->
                                         </div>
                                     </div>
                                     <!-- 内容欄 -->
@@ -61,9 +53,9 @@
                                         <label class="form-label" for="content">内容</label>
                                         <p class="mb-1"></p>
                                         <div class="col-md-7">
-                                            <!-- <input class="form-control" type="content" th:field="*{password}" th:errorclass="err" id="password"> -->
+                                            <textarea rows="3" cols="80" class="form-control" type="text" th:field="*{content}" th:errorclass="err" id="content"></textarea>
+                                            <span th:errors="*{content}" class="text-danger"></span>
                                             <!-- <span th:if="${passwordError} neq null" th:text="${passwordError}" class="text-danger"></span> -->
-                                            <textarea rows="3" cols="80" class="form-control" type="text" th:field="*{content}"></textarea>
                                         </div>
                                     </div>
                                 </div>

@@ -82,12 +82,11 @@ public class ReportController {
         }
         */
         
-        /*
         // 入力チェック
         if (res.hasErrors()) {
-            return create(report, null, model);
+            return create(report, userDetail, model);
         }
-        */
+        
         
         // 業務チェック
         // 論理削除を行った従業員番号を指定すると例外となるためtry~catchで対応
@@ -117,6 +116,73 @@ public class ReportController {
             return create(report, userDetail, model);
         }
         
+
+        return "redirect:/reports";
+    }
+    
+    
+    // 日報更新画面
+    @GetMapping(value = "/{id}/update")
+    public String edit(Report report, @AuthenticationPrincipal UserDetail userDetail, @PathVariable String id, Model model) {
+        
+        Employee employee = userDetail.getEmployee();
+        report.setEmployee(employee);
+        model.addAttribute("report", report);
+        
+        /*
+        if(code != null) {
+            // idがnullでないとき -> サービスから取得した値をModelに登録
+            model.addAttribute("employee", employeeService.findByCode(code));
+                // サービスで定義したgetUserの結果をuserという名前でModelに登録
+            // User更新画面に遷移
+        } else {
+            // idがnullのとき
+            model.addAttribute("employee", employee);
+        }
+        */
+        return "reports/update";
+    }
+
+    
+    /*
+    // 従業員更新処理
+    @PostMapping(value = "/{code}/update")
+    public String update(@Validated Employee employee, BindingResult res, Model model) {
+        // ValidatedアノテーションでEmployeeエンティティに基づく入力チェック
+        
+        if(res.hasErrors()) {
+            // エラーありの場合
+            return edit(employee, null, model);
+        }
+        
+        ErrorKinds result = employeeService.update(employee);
+
+        if (ErrorMessage.contains(result)) {
+            model.addAttribute(ErrorMessage.getErrorName(result), ErrorMessage.getErrorValue(result));
+            return edit(employee, null, model);
+        }
+            
+        // 入力結果の登録
+        employeeService.update(employee);
+        // 一覧画面にリダイレクト
+        return "redirect:/employees";
+    }
+    */
+    
+    
+    // 日報削除処理
+    @PostMapping(value = "/{id}/delete")
+    // public String delete(@PathVariable String id, @AuthenticationPrincipal UserDetail userDetail, Model model) {
+    public String delete(@PathVariable String id, Model model) {
+        
+        // ErrorKinds result = reportService.delete(id, userDetail);
+        ErrorKinds result = reportService.delete(id);
+
+        if (ErrorMessage.contains(result)) {
+            model.addAttribute(ErrorMessage.getErrorName(result), ErrorMessage.getErrorValue(result));
+            model.addAttribute("report", reportService.findByCode(id));
+            return detail(id, model);
+        }
 
         return "redirect:/reports";
     }

@@ -90,23 +90,27 @@ public class ReportService {
         employeeRepository.save(employee);
         return ErrorKinds.SUCCESS;
     }
+    */
 
     // 従業員削除
     @Transactional
-    public ErrorKinds delete(String code, UserDetail userDetail) {
-
+    // public ErrorKinds delete(String id, UserDetail userDetail) {
+    public ErrorKinds delete(String id) {
+        
+        /*
         // 自分を削除しようとした場合はエラーメッセージを表示
         if (code.equals(userDetail.getEmployee().getCode())) {
             return ErrorKinds.LOGINCHECK_ERROR;
         }
-        Employee employee = findByCode(code);
+        */
+        Report report = findByCode(id);
         LocalDateTime now = LocalDateTime.now();
-        employee.setUpdatedAt(now);
-        employee.setDeleteFlg(true);
+        report.setUpdatedAt(now);
+        report.setDeleteFlg(true);
 
         return ErrorKinds.SUCCESS;
     }
-    */
+    
 
     // 日報一覧表示処理
     public List<Report> findAll() {
